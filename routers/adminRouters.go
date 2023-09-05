@@ -10,9 +10,10 @@ func AdminRoutersInit(router *gin.Engine) {
 	adminRouters := router.Group("/admin", middlewares.InitMiddleware)
 	{
 		adminRouters.GET("/", admin.MainController{}.Index)
-		adminRouters.GET("/welcome", admin.MainController{}.Welcome)
+		adminRouters.GET("/welcome", admin.MainController{}.Hello)
 
 		adminRouters.GET("/login", admin.LoginController{}.Login)
+		adminRouters.GET("/captcha", admin.LoginController{}.Captcha)
 		adminRouters.POST("/doLogin", admin.LoginController{}.DoLogin)
 
 		adminRouters.GET("/manager", admin.ManagerController{}.Index)
