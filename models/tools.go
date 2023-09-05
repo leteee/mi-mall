@@ -1,6 +1,10 @@
 package models
 
 import (
+	"crypto/md5"
+	"fmt"
+	"io"
+	"strconv"
 	"time"
 )
 
@@ -35,4 +39,23 @@ func GetDate() string {
 func GetDay() string {
 	template := "20060102"
 	return time.Now().Format(template)
+}
+
+// md5加密
+func Md5(str string) string {
+	h := md5.New()
+	io.WriteString(h, str)
+	return fmt.Sprintf("%x", h.Sum(nil))
+}
+
+// 表示把string转换成int
+func Int(str string) (int, error) {
+	n, err := strconv.Atoi(str)
+	return n, err
+}
+
+// 表示把int转换成string
+func String(n int) string {
+	str := strconv.Itoa(n)
+	return str
 }

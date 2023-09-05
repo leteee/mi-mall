@@ -1,4 +1,4 @@
-var app = {
+const app = {
     init: function () {
         this.getCaptcha();
         this.captchaClick();
@@ -11,11 +11,12 @@ var app = {
         })
     },
     captchaClick: function () {
+        const that = this;
         $("#captchaImg").click(function () {
-            this.getCaptcha();
-        }).bind(this)
+            that.getCaptcha();
+        })
     }
-}
+};
 
 $(function () {
     app.init()

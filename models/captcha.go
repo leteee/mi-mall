@@ -13,9 +13,9 @@ func MakeCaptcha() (string, string, error) {
 	driverString := base64Captcha.DriverString{
 		Height:          40,
 		Width:           100,
-		NoiseCount:      1,
+		NoiseCount:      0,
 		ShowLineOptions: 2 | 4,
-		Length:          4,
+		Length:          2,
 		Source:          "1234567890",
 		BgColor: &color.RGBA{
 			R: 3,

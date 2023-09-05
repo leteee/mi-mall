@@ -7,7 +7,7 @@ import (
 )
 
 func AdminRoutersInit(router *gin.Engine) {
-	adminRouters := router.Group("/admin", middlewares.InitMiddleware)
+	adminRouters := router.Group("/admin", middlewares.InitAdminAuthMiddleware)
 	{
 		adminRouters.GET("/", admin.MainController{}.Index)
 		adminRouters.GET("/welcome", admin.MainController{}.Hello)
@@ -15,6 +15,7 @@ func AdminRoutersInit(router *gin.Engine) {
 		adminRouters.GET("/login", admin.LoginController{}.Login)
 		adminRouters.GET("/captcha", admin.LoginController{}.Captcha)
 		adminRouters.POST("/doLogin", admin.LoginController{}.DoLogin)
+		adminRouters.GET("/logout", admin.LoginController{}.Logout)
 
 		adminRouters.GET("/manager", admin.ManagerController{}.Index)
 		adminRouters.GET("/manager/add", admin.ManagerController{}.Add)
