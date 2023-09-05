@@ -31,9 +31,8 @@ func (con LoginController) DoLogin(c *gin.Context) {
 	captchaText := c.PostForm("captchaText")
 	fmt.Println(captchaText)
 	if models.Verify(captchaId, captchaText) {
-		fmt.Println("验证码验证成功")
+		con.success(c, "登录成功", "/admin")
 	} else {
-		fmt.Println("验证码验证失败")
+		con.error(c, "验证码验证失败", "/admin/login")
 	}
-	c.String(http.StatusOK, "Dologin")
 }
