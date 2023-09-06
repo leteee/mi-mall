@@ -1,23 +1,22 @@
-const app = {
+const loginApp = {
     init: function () {
-        this.getCaptcha();
-        this.captchaClick();
+        this.getCaptcha()
+        this.captchaImgChage()
     },
     getCaptcha: function () {
-        //h获取图形验证码
-        $.get("/admin/captcha?t=" + Math.random()).then(function (result) {
-            $("#captchaId").attr("value", result.captchaId);
-            $("#captchaImg").attr("src", result.captchaImage);
+        $.get("/admin/captcha?t=" + Math.random(), function (response) {
+            console.log(response)
+            $("#captchaId").val(response.captchaId)
+            $("#captchaImg").attr("src", response.captchaImage)
         })
     },
-    captchaClick: function () {
+    captchaImgChage: function () {
         const that = this;
         $("#captchaImg").click(function () {
-            that.getCaptcha();
+            that.getCaptcha()
         })
     }
 };
-
 $(function () {
-    app.init()
+    loginApp.init();
 })

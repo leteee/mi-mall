@@ -27,5 +27,5 @@ func main() {
 	r.Static("/static", "static")
 
 	routers.AdminRoutersInit(r)
-	r.Run()
+	r.Run(":80")
 }
