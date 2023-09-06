@@ -6,20 +6,23 @@ import (
 	"mi-mall/middlewares"
 )
 
-func AdminRoutersInit(router *gin.Engine) {
-	adminRouters := router.Group("/admin", middlewares.InitAdminAuthMiddleware)
+func AdminRoutersInit(r *gin.Engine) {
+	//middlewares.InitMiddleware中间件
+	adminRouters := r.Group("/admin", middlewares.InitAdminAuthMiddleware)
 	{
 		adminRouters.GET("/", admin.MainController{}.Index)
-		adminRouters.GET("/welcome", admin.MainController{}.Hello)
+		adminRouters.GET("/welcome", admin.MainController{}.Welcome)
 
-		adminRouters.GET("/login", admin.LoginController{}.Login)
+		adminRouters.GET("/login", admin.LoginController{}.Index)
 		adminRouters.GET("/captcha", admin.LoginController{}.Captcha)
 		adminRouters.POST("/doLogin", admin.LoginController{}.DoLogin)
-		adminRouters.GET("/logout", admin.LoginController{}.Logout)
+		adminRouters.GET("/loginOut", admin.LoginController{}.LoginOut)
 
 		adminRouters.GET("/manager", admin.ManagerController{}.Index)
 		adminRouters.GET("/manager/add", admin.ManagerController{}.Add)
+		adminRouters.POST("/manager/doAdd", admin.ManagerController{}.DoAdd)
 		adminRouters.GET("/manager/edit", admin.ManagerController{}.Edit)
+		adminRouters.POST("/manager/doEdit", admin.ManagerController{}.DoEdit)
 		adminRouters.GET("/manager/delete", admin.ManagerController{}.Delete)
 
 		adminRouters.GET("/focus", admin.FocusController{}.Index)
@@ -33,5 +36,6 @@ func AdminRoutersInit(router *gin.Engine) {
 		adminRouters.GET("/role/edit", admin.RoleController{}.Edit)
 		adminRouters.POST("/role/doEdit", admin.RoleController{}.DoEdit)
 		adminRouters.GET("/role/delete", admin.RoleController{}.Delete)
+
 	}
 }

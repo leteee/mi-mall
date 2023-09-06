@@ -3,22 +3,61 @@ package admin
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-gonic/gin"
 	"mi-mall/models"
 	"net/http"
+
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-gonic/gin"
 )
 
 type LoginController struct {
 	BaseController
 }
 
-func (con LoginController) Login(c *gin.Context) {
-	c.HTML(http.StatusOK, "admin/login/index.html", gin.H{})
+func (con LoginController) Index(c *gin.Context) {
+	//验证md5是否正确
+	// fmt.Println(models.Md5("123456"))   e10adc3949ba59abbe56e057f20f883e
+
+	c.HTML(http.StatusOK, "admin/login/login.html", gin.H{})
+
+}
+func (con LoginController) DoLogin(c *gin.Context) {
+
+	captchaId := c.PostForm("captchaId")
+	username := c.PostForm("username")
+	password := c.PostForm("password")
+	verifyValue := c.PostForm("verifyValue")
+	fmt.Println(username, password)
+	//1、验证验证码是否正确
+	if flag := models.VerifyCaptcha(captchaId, verifyValue); flag {
+		//2、查询数据库 判断用户以及密码是否存在
+		userinfoList := []models.Manager{}
+		password = models.Md5(password)
+
+		models.DB.Where("username=? AND password=?", username, password).Find(&userinfoList)
+
+		if len(userinfoList) > 0 {
+			//3、执行登录 保存用户信息 执行跳转
+			session := sessions.Default(c)
+			//注意：session.Set没法直接保存结构体对应的切片 把结构体转换成json字符串
+			userinfoSlice, _ := json.Marshal(userinfoList)
+			session.Set("userinfo", string(userinfoSlice))
+			session.Save()
+			con.Success(c, "登录成功", "/admin")
+
+		} else {
+			con.Error(c, "用户名或者密码错误", "/admin/login")
+		}
+
+	} else {
+		con.Error(c, "验证码验证失败", "/admin/login")
+	}
+
 }
 
 func (con LoginController) Captcha(c *gin.Context) {
 	id, b64s, err := models.MakeCaptcha()
+
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -27,35 +66,7 @@ func (con LoginController) Captcha(c *gin.Context) {
 		"captchaImage": b64s,
 	})
 }
-
-func (con LoginController) DoLogin(c *gin.Context) {
-	captchaId := c.PostForm("captchaId")
-	captchaText := c.PostForm("captchaText")
-	fmt.Println(captchaText)
-	if models.Verify(captchaId, captchaText) {
-		username := c.PostForm("username")
-		password := c.PostForm("password")
-		password = models.Md5(password)
-		var userinfo []models.Manager
-		models.DB.Where("username=? AND password=?", username, password).Find(&userinfo)
-		fmt.Println(userinfo)
-		if len(userinfo) > 0 {
-			session := sessions.Default(c)
-			userinfoSlice, _ := json.Marshal(userinfo)
-			fmt.Println(string(userinfoSlice))
-			session.Set("userinfo", string(userinfoSlice))
-			session.Save()
-
-			con.Success(c, "登录成功", "/admin")
-		} else {
-			con.Error(c, "用户名或密码错误", "/admin/login")
-		}
-	} else {
-		con.Error(c, "验证码验证失败", "/admin/login")
-	}
-}
-
-func (con LoginController) Logout(c *gin.Context) {
+func (con LoginController) LoginOut(c *gin.Context) {
 	session := sessions.Default(c)
 	session.Delete("userinfo")
 	session.Save()
