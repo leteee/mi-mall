@@ -8,6 +8,7 @@ import (
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type MainController struct{}
@@ -26,7 +27,9 @@ func (con MainController) Index(c *gin.Context) {
 
 		//2、获取所有的权限
 		accessList := []models.Access{}
-		models.DB.Where("module_id=?", 0).Preload("AccessItem").Find(&accessList)
+		models.DB.Where("module_id=?", 0).Preload("AccessItem", func(db *gorm.DB) *gorm.DB {
+			return db.Order("access.sort DESC")
+		}).Order("sort DESC").Find(&accessList)
 
 		//3、获取当前角色拥有的权限 ，并把权限id放在一个map对象里面
 		roleAccess := []models.RoleAccess{}
@@ -62,4 +65,67 @@ func (con MainController) Index(c *gin.Context) {
 
 func (con MainController) Welcome(c *gin.Context) {
 	c.HTML(http.StatusOK, "admin/main/welcome.html", gin.H{})
+}
+
+// 公共修改状态的方法
+func (con MainController) ChangeStatus(c *gin.Context) {
+	id, err := models.Int(c.Query("id"))
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"success": false,
+			"message": "传入的参数错误",
+		})
+		return
+	}
+
+	table := c.Query("table")
+	field := c.Query("field")
+
+	// status = ABS(0-1)   1
+
+	// status = ABS(1-1)  0
+
+	err1 := models.DB.Exec("update "+table+" set "+field+"=ABS("+field+"-1) where id=?", id).Error
+	if err1 != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"success": false,
+			"message": "修改失败 请重试",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "修改成功",
+	})
+}
+
+// 公共修改状态的方法
+func (con MainController) ChangeNum(c *gin.Context) {
+	id, err := models.Int(c.Query("id"))
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"success": false,
+			"message": "传入的参数错误",
+		})
+		return
+	}
+
+	table := c.Query("table")
+	field := c.Query("field")
+	num := c.Query("num")
+
+	err1 := models.DB.Exec("update "+table+" set "+field+"="+num+" where id=?", id).Error
+	if err1 != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"success": false,
+			"message": "修改数据失败",
+		})
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"success": true,
+			"message": "修改成功",
+		})
+	}
+
 }

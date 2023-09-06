@@ -7,10 +7,10 @@ import (
 	"github.com/mojocn/base64Captcha"
 )
 
-// 创建store
+//创建store
 var store = base64Captcha.DefaultMemStore
 
-// 获取验证码
+//获取验证码
 func MakeCaptcha() (string, string, error) {
 	var driver base64Captcha.Driver
 	driverString := base64Captcha.DriverString{
@@ -37,7 +37,7 @@ func MakeCaptcha() (string, string, error) {
 
 }
 
-// 验证验证码
+//验证验证码
 func VerifyCaptcha(id string, VerifyValue string) bool {
 	fmt.Println(id, VerifyValue)
 	if store.Verify(id, VerifyValue, true) {

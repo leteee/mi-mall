@@ -52,7 +52,7 @@ func InitAdminAuthMiddleware(c *gin.Context) {
 					roleAccessMap[v.AccessId] = v.AccessId
 				}
 				// 2、获取当前访问的url对应的权限id 判断权限id是否在角色对应的权限
-				// pathname   /admin/manager
+				// pathname      /admin/manager
 				access := models.Access{}
 				models.DB.Where("url = ?", urlPath).Find(&access)
 				//3、判断当前访问的url对应的权限id 是否在权限列表的id中

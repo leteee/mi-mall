@@ -5,9 +5,8 @@ go 1.17
 require (
 	github.com/gin-contrib/sessions v0.0.3
 	github.com/gin-gonic/gin v1.7.4
-	github.com/go-redis/redis/v7 v7.4.1
 	github.com/mojocn/base64Captcha v1.3.5
-	gopkg.in/ini.v1 v1.63.0
+	gopkg.in/ini.v1 v1.63.2
 	gorm.io/driver/mysql v1.1.2
 	gorm.io/gorm v1.21.15
 )
@@ -30,7 +29,6 @@ require (
 	github.com/mattn/go-isatty v0.0.12 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 // indirect
 	github.com/modern-go/reflect2 v0.0.0-20180701023420-4b7aa43c6742 // indirect
-	github.com/smartystreets/goconvey v1.6.4 // indirect
 	github.com/ugorji/go/codec v1.1.7 // indirect
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9 // indirect
 	golang.org/x/image v0.0.0-20190501045829-6d32002ffd75 // indirect
