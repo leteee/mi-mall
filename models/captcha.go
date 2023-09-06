@@ -8,8 +8,7 @@ import (
 )
 
 // 创建store
-// var store = base64Captcha.DefaultMemStore
-var store base64Captcha.Store = &RedisStore{}
+var store = base64Captcha.DefaultMemStore
 
 // 获取验证码
 func MakeCaptcha() (string, string, error) {

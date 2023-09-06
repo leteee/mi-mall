@@ -1,9 +1,10 @@
 package routers
 
 import (
-	"github.com/gin-gonic/gin"
 	"mi-mall/controllers/admin"
 	"mi-mall/middlewares"
+
+	"github.com/gin-gonic/gin"
 )
 
 func AdminRoutersInit(r *gin.Engine) {
@@ -36,6 +37,15 @@ func AdminRoutersInit(r *gin.Engine) {
 		adminRouters.GET("/role/edit", admin.RoleController{}.Edit)
 		adminRouters.POST("/role/doEdit", admin.RoleController{}.DoEdit)
 		adminRouters.GET("/role/delete", admin.RoleController{}.Delete)
+		adminRouters.GET("/role/auth", admin.RoleController{}.Auth)
+		adminRouters.POST("/role/doAuth", admin.RoleController{}.DoAuth)
+
+		adminRouters.GET("/access", admin.AccessController{}.Index)
+		adminRouters.GET("/access/add", admin.AccessController{}.Add)
+		adminRouters.POST("/access/doAdd", admin.AccessController{}.DoAdd)
+		adminRouters.GET("/access/edit", admin.AccessController{}.Edit)
+		adminRouters.POST("/access/doEdit", admin.AccessController{}.DoEdit)
+		adminRouters.GET("/access/delete", admin.AccessController{}.Delete)
 
 	}
 }

@@ -1,8 +1,9 @@
 package routers
 
 import (
-	"github.com/gin-gonic/gin"
 	"mi-mall/controllers/itying"
+
+	"github.com/gin-gonic/gin"
 )
 
 func DefaultRoutersInit(r *gin.Engine) {

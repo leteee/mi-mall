@@ -5,10 +5,11 @@ go 1.17
 require (
 	github.com/gin-contrib/sessions v0.0.3
 	github.com/gin-gonic/gin v1.7.4
+	github.com/go-redis/redis/v7 v7.4.1
 	github.com/mojocn/base64Captcha v1.3.5
 	gopkg.in/ini.v1 v1.63.0
 	gorm.io/driver/mysql v1.1.2
-	gorm.io/gorm v1.21.14
+	gorm.io/gorm v1.21.15
 )
 
 require (
@@ -16,7 +17,6 @@ require (
 	github.com/go-playground/locales v0.13.0 // indirect
 	github.com/go-playground/universal-translator v0.17.0 // indirect
 	github.com/go-playground/validator/v10 v10.4.1 // indirect
-	github.com/go-redis/redis/v7 v7.4.1 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/golang/protobuf v1.3.3 // indirect
