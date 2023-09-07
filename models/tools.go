@@ -88,6 +88,31 @@ func String(n int) string {
 	return str
 }
 
+//Substr截取字符串
+func Substr(str string, start int, end int) string {
+	rs := []rune(str)
+	rl := len(rs)
+	if start < 0 {
+		start = 0
+	}
+	if start > rl {
+		start = 0
+	}
+
+	if end < 0 {
+		end = rl
+	}
+	if end > rl {
+		end = rl
+	}
+	if start > end {
+		start, end = end, start
+	}
+
+	return string(rs[start:end])
+
+}
+
 //Oss上传
 func OssUplod(file *multipart.FileHeader, dst string) (string, error) {
 
@@ -148,6 +173,10 @@ func FormatImg(str string) string {
 	} else {
 		return "/" + str
 	}
+}
+
+func Sub(a int, b int) int {
+	return a - b
 }
 
 //上传图片
@@ -247,7 +276,8 @@ func LocalUploadImg(c *gin.Context, picName string) (string, error) {
 
 func ResizeGoodsImage(filename string) {
 	extname := path.Ext(filename)
-	thumbnailSizeSlice := strings.Split(GetSettingFromColumn("ThumbnailSize"), ",")
+	ThumbnailSize := strings.ReplaceAll(GetSettingFromColumn("ThumbnailSize"), "，", ",")
+	thumbnailSizeSlice := strings.Split(ThumbnailSize, ",")
 	//static/upload/tao_400.png
 	//static/upload/tao_400.png_100x100.png
 	for i := 0; i < len(thumbnailSizeSlice); i++ {
