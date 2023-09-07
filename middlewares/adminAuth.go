@@ -3,11 +3,11 @@ package middlewares
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/gin-contrib/sessions"
 	"mi-mall/models"
 	"os"
 	"strings"
 
-	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"gopkg.in/ini.v1"
 )
