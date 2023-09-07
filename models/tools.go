@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"errors"
 	"fmt"
+	"html/template"
 	"io"
 	"os"
 	"path"
@@ -56,6 +57,11 @@ func Md5(str string) string {
 	h := md5.New()
 	io.WriteString(h, str)
 	return fmt.Sprintf("%x", h.Sum(nil))
+}
+
+//把字符串解析成html
+func Str2Html(str string) template.HTML {
+	return template.HTML(str)
 }
 
 //表示把string转换成int
