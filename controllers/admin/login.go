@@ -56,7 +56,7 @@ func (con LoginController) DoLogin(c *gin.Context) {
 }
 
 func (con LoginController) Captcha(c *gin.Context) {
-	id, b64s, err := models.MakeCaptcha()
+	id, b64s, err := models.MakeCaptcha(34, 100, 2)
 
 	if err != nil {
 		fmt.Println(err)
@@ -66,6 +66,7 @@ func (con LoginController) Captcha(c *gin.Context) {
 		"captchaImage": b64s,
 	})
 }
+
 func (con LoginController) LoginOut(c *gin.Context) {
 	session := sessions.Default(c)
 	session.Delete("userinfo")

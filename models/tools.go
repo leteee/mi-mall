@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"html/template"
 	"io"
+	"math/rand"
 	"mime/multipart"
 	"os"
 	"path"
@@ -16,6 +17,7 @@ import (
 
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"github.com/gin-gonic/gin"
+	"github.com/gomarkdown/markdown"
 	. "github.com/hunterhug/go_image"
 	"gopkg.in/ini.v1"
 )
@@ -179,6 +181,10 @@ func Sub(a int, b int) int {
 	return a - b
 }
 
+func Mul(price float64, num int) float64 {
+	return price * float64(num)
+}
+
 //上传图片
 func UploadImg(c *gin.Context, picName string) (string, error) {
 	ossStatus := GetOssStatus()
@@ -233,7 +239,7 @@ func LocalUploadImg(c *gin.Context, picName string) (string, error) {
 	// 1、获取上传的文件
 	file, err := c.FormFile(picName)
 
-	fmt.Println(file)
+	// fmt.Println(file)
 	if err != nil {
 		return "", err
 	}
@@ -289,4 +295,53 @@ func ResizeGoodsImage(filename string) {
 		}
 	}
 
+}
+
+/*
+
+str就是markdown语法
+
+### 我是一个三级标题
+
+<h3>我是一个三级标题</h3>
+
+
+**我是一个加粗**
+
+<strong>我是一个加粗</strong>
+
+
+*/
+
+func FormatAttr(str string) string {
+
+	tempSlice := strings.Split(str, "\n")
+	var tempStr string
+	for _, v := range tempSlice {
+		md := []byte(v)
+		output := markdown.ToHTML(md, nil, nil)
+		tempStr += string(output)
+	}
+	return tempStr
+}
+
+//生成随机数
+
+func GetRandomNum() string {
+	var str string
+
+	for i := 0; i < 4; i++ {
+		current := rand.Intn(10)
+
+		str += String(current)
+	}
+	return str
+}
+
+// GetOrderId
+
+func GetOrderId() string {
+	// 2022020312233
+	template := "20060102150405"
+	return time.Now().Format(template) + GetRandomNum()
 }

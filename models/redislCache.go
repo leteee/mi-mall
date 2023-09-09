@@ -59,13 +59,21 @@ func (c cacheDb) Set(key string, value interface{}, expiration int) {
 func (c cacheDb) Get(key string, obj interface{}) bool {
 	if redisEnable {
 		valueStr, err1 := rdbClient.Get(ctx, key).Result()
-		if err1 == nil && valueStr != "" {
+		//如果数据库连不上的话 也会缓存到redis中
+		if err1 == nil && valueStr != "" && valueStr != "[]" {
 			err2 := json.Unmarshal([]byte(valueStr), obj)
 			return err2 == nil
 		}
 		return false
 	}
 	return false
+}
+
+//清除缓存
+func (c cacheDb) FlushAll() {
+	if redisEnable {
+		rdbClient.FlushAll(ctx)
+	}
 }
 
 var CacheDb = &cacheDb{}

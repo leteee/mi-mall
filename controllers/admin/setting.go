@@ -30,7 +30,7 @@ func (con SettingController) DoEdit(c *gin.Context) {
 	} else {
 		// 上传图片 logo
 		siteLogo, err1 := models.UploadImg(c, "site_logo")
-		fmt.Println(siteLogo)
+		// fmt.Println(siteLogo)
 		if len(siteLogo) > 0 && err1 == nil {
 			setting.SiteLogo = siteLogo
 		}

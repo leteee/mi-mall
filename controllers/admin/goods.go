@@ -37,7 +37,7 @@ func (con GoodsController) Index(c *gin.Context) {
 	pageSize := 8
 
 	goodsList := []models.Goods{}
-	models.DB.Where(where).Offset((page - 1) * pageSize).Limit(pageSize).Find(&goodsList)
+	models.DB.Where(where).Offset((page - 1) * pageSize).Limit(pageSize).Order("id desc").Find(&goodsList)
 
 	//获取总数量
 	var count int64
@@ -306,7 +306,7 @@ func (con GoodsController) Edit(c *gin.Context) {
 	}
 
 	//获取上一页的地址
-	fmt.Println(c.Request.Referer())
+	// fmt.Println(c.Request.Referer())
 
 	c.HTML(http.StatusOK, "admin/goods/edit.html", gin.H{
 		"goods":          goods,

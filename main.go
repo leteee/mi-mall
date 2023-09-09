@@ -19,7 +19,9 @@ func main() {
 		"Str2Html":   models.Str2Html,
 		"FormatImg":  models.FormatImg,
 		"Sub":        models.Sub,
+		"Mul":        models.Mul,
 		"Substr":     models.Substr,
+		"FormatAttr": models.FormatAttr,
 	})
 	//加载模板 放在配置路由前面
 	r.LoadHTMLGlob("templates/**/**/*")
