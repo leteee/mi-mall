@@ -40,7 +40,6 @@ func (Goods) TableName() string {
 	@param {String} goodsType -  hot  best  new all
 	@param {Number} limitNum -  数量
 
-
 	1  表示顶级分类
 		21
 		23
