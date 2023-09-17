@@ -1,48 +1,41 @@
 package models
 
 import (
-	"fmt"
-	"image/color"
+	"context"
+	pbCaptcha "ginshop/proto/captcha"
 
-	"github.com/mojocn/base64Captcha"
+	"go-micro.dev/v4/util/log"
 )
 
-//创建store
-var store = base64Captcha.DefaultMemStore
-
-//获取验证码
+//调用验证码微服务
 func MakeCaptcha(height int, width int, length int) (string, string, error) {
-	var driver base64Captcha.Driver
-	driverString := base64Captcha.DriverString{
-		Height:          height,
-		Width:           width,
-		NoiseCount:      0,
-		ShowLineOptions: 2 | 4,
-		Length:          length,
-		Source:          "1234567890qwertyuioplkjhgfdsazxcvbnm",
-		BgColor: &color.RGBA{
-			R: 102,
-			G: 102,
-			B: 214,
-			A: 125,
-		},
-		Fonts: []string{"wqy-microhei.ttc"},
+
+	// Create client
+	captchaClient := pbCaptcha.NewCaptchaService("captcha", CaptchaClient)
+	// Call service
+	res, err := captchaClient.MakeCaptcha(context.Background(), &pbCaptcha.MakeCaptchaRequest{
+		Height: int32(height),
+		Width:  int32(width),
+		Length: int32(length),
+	})
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	driver = driverString.ConvertFonts()
-
-	c := base64Captcha.NewCaptcha(driver, store)
-	id, b64s, err := c.Generate()
-	return id, b64s, err
-
+	return res.Id, res.B64S, err
 }
 
 //验证验证码
 func VerifyCaptcha(id string, VerifyValue string) bool {
-	fmt.Println(id, VerifyValue)
-	if store.Verify(id, VerifyValue, true) {
-		return true
-	} else {
-		return false
+	// Create client
+	captchaClient := pbCaptcha.NewCaptchaService("captcha", CaptchaClient)
+	// Call service
+	res, err := captchaClient.VerifyCaptcha(context.Background(), &pbCaptcha.VerifyCaptchaRequest{
+		Id:          id,
+		VerifyValue: VerifyValue,
+	})
+	if err != nil {
+		log.Fatal(err)
 	}
+	return res.VerifyResult
 }
